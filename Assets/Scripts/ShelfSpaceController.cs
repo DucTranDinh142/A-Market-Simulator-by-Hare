@@ -66,7 +66,6 @@ public class ShelfSpaceController : MonoBehaviour
 
         if (!preventPlacement)
         {
-            objectToPlace.transform.SetParent(transform);
             objectToPlace.MakePlaced();
 
             switch (info.stockType)
@@ -89,10 +88,9 @@ public class ShelfSpaceController : MonoBehaviour
             }
             objectsOnShelf.Add(objectToPlace);
 
-            priceLabel.color = Color.black;
-            priceLabel.text = objectsOnShelf[0].stockInfo.stockName + "\n$" + objectsOnShelf[0].stockInfo.stockPrice;
-        }
+            UpdatePriceLabel(info.modifiedStockPrice);
 
+        }
     }
     public StockObject GetStock()
     {
@@ -106,10 +104,27 @@ public class ShelfSpaceController : MonoBehaviour
 
         if (objectsOnShelf.Count == 0)
         {
-            priceLabel.color = Color.red;
-            priceLabel.text = "Sold Out";
+            priceLabel.text = "<color=red>Sold Out</color>";
         }
 
         return stockObjectToReturn;
+    }
+
+    public void StartPriceUpdate()
+    {
+        if(objectsOnShelf.Count > 0)
+        {
+            UIController.Instance.ShowUpdatePriceUI(info);
+        }
+    }
+
+    public void UpdatePriceLabel(float price)
+    {
+        if (objectsOnShelf.Count > 0)
+        {
+            info.modifiedStockPrice = price;
+
+            priceLabel.text = $"<color=black>{objectsOnShelf[0].stockInfo.stockName}</color>" + "\n<color=green>$</color>" + $"<color=yellow>{price.ToString("F2")}</color>";
+        }
     }
 }

@@ -9,6 +9,7 @@ public class StockObject : MonoBehaviour
     public bool _isPlaced { get; private set; }
     private Collider _stockCollider;
 
+
     void Awake()
     {
         _stockRigidbody = GetComponent<Rigidbody>();
@@ -38,10 +39,11 @@ public class StockObject : MonoBehaviour
     {
         _stockRigidbody.isKinematic = true;
 
-        transform.localPosition = Vector3.zero;
-        transform.localRotation = Quaternion.identity;
-
-        _isPlaced = false;
+        _isPlaced = true;
+        if (transform.localPosition == Vector3.zero && transform.localRotation == Quaternion.identity)
+        {
+            _isPlaced = false;
+        }
         _stockCollider.enabled = false;
     }
     public void MakePlaced()
@@ -57,5 +59,11 @@ public class StockObject : MonoBehaviour
 
         _isPlaced = false;
         _stockCollider.enabled = true;
+    }
+
+    public void PlaceInBox() 
+    {
+        _stockRigidbody.isKinematic = true;
+        _stockCollider.enabled = false;
     }
 }

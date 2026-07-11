@@ -5,7 +5,7 @@ public class StockInfo
 {
     public string stockName;
     public StockType stockType;
-    public float stockPrice;
+    public float stockPrice, modifiedStockPrice;
 
     public StockObject stockObject;
 }

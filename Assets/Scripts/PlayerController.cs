@@ -30,11 +30,17 @@ public class PlayerController : MonoBehaviour
     [Header("Layer Mask Settings")]
     [SerializeField] private LayerMask _whatIsStock;
     [SerializeField] private LayerMask _whatIsShelf;
+    [SerializeField] private LayerMask _whatIsBox;
+    [SerializeField] private LayerMask _whatIsBin;
     [Header("Interaction Settings")]
     [SerializeField] private float _interactDistance;
-    [SerializeField] private Transform _holdPoint;
+    [SerializeField] private Transform _stockHoldPoint;
+    [SerializeField] private Transform _boxHoldPoint;
     [SerializeField] private float _throwForce;
+    [SerializeField] private float _fastRestockHoldingTime;
+    private float _placeStockTimer;
     private StockObject _heldItem;
+    private StockBoxController _heldBox;
 
     void Awake()
     {
@@ -44,27 +50,52 @@ public class PlayerController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (UIController.Instance.updatePriceUI != null || UIController.Instance.shopUI != null)
+        {
+            if (UIController.Instance.updatePriceUI.activeSelf || UIController.Instance.shopUI.activeSelf)
+            {
+                return;
+            }
+        }
+
         MovementActionHandle();
 
         Ray ray = _playerCamera.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         RaycastHit visualHit, actualHit;
         visualHit = InteractableRayCastHit(ray);
 
-        if (_heldItem == null)
+        if (_heldItem == null && _heldBox == null)
         {
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
                 if (Physics.Raycast(ray, out actualHit, _interactDistance, _whatIsStock))
                 {
                     _heldItem = actualHit.collider.GetComponent<StockObject>();
-                    _heldItem.transform.SetParent(_holdPoint);
+                    _heldItem.transform.SetParent(_stockHoldPoint);
                     _heldItem.Pickup();
+                    return;
+                }
+                if (Physics.Raycast(ray, out actualHit, _interactDistance, _whatIsBox))
+                {
+                    _heldBox = actualHit.collider.GetComponent<StockBoxController>();
+                    _heldBox.transform.SetParent(_boxHoldPoint);
+                    _heldBox.Pickup();
+                    if (!_heldBox.opened)
+                    {
+                        _heldBox.OpenClose();
+                    }
+                    return;
+                }
+                if (Physics.Raycast(ray, out actualHit, _interactDistance, _whatIsShelf))
+                {
+                    actualHit.collider.GetComponent<ShelfSpaceController>().StartPriceUpdate();
+                    return;
                 }
             }
 
@@ -75,13 +106,21 @@ public class PlayerController : MonoBehaviour
                     _heldItem = actualHit.collider.GetComponent<ShelfSpaceController>().GetStock();
                     if (_heldItem != null)
                     {
-                        _heldItem.transform.SetParent(_holdPoint);
+                        _heldItem.transform.SetParent(_stockHoldPoint);
                         _heldItem.Pickup();
                     }
                 }
             }
+
+            if (Keyboard.current.eKey.wasPressedThisFrame)
+            {
+                if (Physics.Raycast(ray, out actualHit, _interactDistance, _whatIsBox))
+                {
+                    actualHit.collider.GetComponent<StockBoxController>().OpenClose();
+                }
+            }
         }
-        else
+        else if (_heldItem != null)
         {
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
@@ -101,6 +140,56 @@ public class PlayerController : MonoBehaviour
                 _heldItem._stockRigidbody.AddForce(_playerCamera.transform.forward * _throwForce, ForceMode.Impulse);
                 _heldItem.transform.SetParent(null);
                 _heldItem = null;
+            }
+        }
+        else if (_heldBox != null)
+        {
+            if (Keyboard.current.eKey.wasPressedThisFrame)
+            {
+                _heldBox.OpenClose();
+                return;
+            }
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                if (Physics.Raycast(ray, out actualHit, _interactDistance, _whatIsShelf))
+                {
+                    if (_heldBox.opened)
+                    {
+                        _heldBox.PlaceStockOnShelf(actualHit.collider.GetComponent<ShelfSpaceController>());
+                        _placeStockTimer = _fastRestockHoldingTime;
+                    }
+                return;
+                }
+                if (Physics.Raycast(ray, out actualHit, _interactDistance, _whatIsBin))
+                {
+                    if (_heldBox.stocksInBox.Count <= 0)
+                    {
+                        Destroy(_heldBox.gameObject);
+                    }
+                }
+            }
+            if (Mouse.current.leftButton.isPressed)
+            {
+                _placeStockTimer -= Time.deltaTime;
+                if (_placeStockTimer <= 0f)
+                {
+                    if (Physics.Raycast(ray, out actualHit, _interactDistance, _whatIsShelf))
+                    {
+                        if (_heldBox.opened)
+                        {
+                            _heldBox.PlaceStockOnShelf(actualHit.collider.GetComponent<ShelfSpaceController>());
+                            _placeStockTimer = _fastRestockHoldingTime;
+                        }
+                    }
+                }
+            }
+            if (Mouse.current.rightButton.wasPressedThisFrame)
+            {
+                _heldBox.Release();
+                _heldBox._boxRigidbody.AddForce(_playerCamera.transform.forward * _throwForce, ForceMode.Impulse);
+                _heldBox.transform.SetParent(null);
+                _heldBox = null;
+                return;
             }
         }
     }
@@ -143,33 +232,18 @@ public class PlayerController : MonoBehaviour
     private RaycastHit InteractableRayCastHit(Ray ray)
     {
         RaycastHit hit;
-        if (_heldItem == null)
+
+
+        if (Physics.Raycast(ray, out hit, _interactDistance, _whatIsStock | _whatIsShelf | _whatIsBox | _whatIsBin))
         {
-            if (Physics.Raycast(ray, out hit, _interactDistance, _whatIsStock))
-            {
-                _crosshair.color = Color.green;
-                _crosshair.transform.localScale = Vector3.one * 0.6f;
-            }
-            else
-            {
-                _crosshair.color = Color.white;
-                _crosshair.transform.localScale = Vector3.one * 0.4f;
-            }
+            _crosshair.color = Color.green;
+            _crosshair.transform.localScale = Vector3.one * 0.6f;
         }
         else
         {
-            if (Physics.Raycast(ray, out hit, _interactDistance, _whatIsShelf))
-            {
-                _crosshair.color = Color.green;
-                _crosshair.transform.localScale = Vector3.one * 0.6f;
-            }
-            else
-            {
-                _crosshair.color = Color.white;
-                _crosshair.transform.localScale = Vector3.one * 0.4f;
-            }
+            _crosshair.color = Color.white;
+            _crosshair.transform.localScale = Vector3.one * 0.4f;
         }
-
         return hit;
     }
 }
