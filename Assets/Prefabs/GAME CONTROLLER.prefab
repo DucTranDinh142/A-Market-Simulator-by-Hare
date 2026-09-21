@@ -1,0 +1,248 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5392723851243740975
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2671612982863774498}
+  m_Layer: 0
+  m_Name: Delivery Spawn Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2671612982863774498
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5392723851243740975}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.22, z: -4.77}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 363420897621813834}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8036101840194497012
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 363420897621813834}
+  - component: {fileID: 4807134892226438748}
+  m_Layer: 0
+  m_Name: Store Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &363420897621813834
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8036101840194497012}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2671612982863774498}
+  m_Father: {fileID: 3549337902384660420}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4807134892226438748
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8036101840194497012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbf79b9672501fb47b1239693f86ad6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentMoney: 100000
+  stockSpawnPoint: {fileID: 2671612982863774498}
+  furnitureSpawnPoint: {fileID: 2671612982863774498}
+--- !u!1 &8199180263878753013
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8816952566441251509}
+  - component: {fileID: 2844348029385720894}
+  m_Layer: 0
+  m_Name: Stock Info Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8816952566441251509
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8199180263878753013}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3549337902384660420}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2844348029385720894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8199180263878753013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae9d001706dd4984bb849e1ba8580b82, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bottleInfos:
+  - stockName: Bottled Water
+    stockType: 1
+    stockPrice: 3.99
+    modifiedStockPrice: 0
+    stockObject: {fileID: 3436924460741015567, guid: 4ca350dba0d91b14fadf981def0331b7, type: 3}
+  - stockName: Lime Juice
+    stockType: 1
+    stockPrice: 6.99
+    modifiedStockPrice: 0
+    stockObject: {fileID: 7536655865687077761, guid: d7fc630373abbfa4fb71dc34d37e89a6, type: 3}
+  - stockName: Orange Juice
+    stockType: 1
+    stockPrice: 6.99
+    modifiedStockPrice: 0
+    stockObject: {fileID: 1352098488026618719, guid: 214cfc897bfa9914a835e97e74ff57ef, type: 3}
+  - stockName: Cola Coke
+    stockType: 1
+    stockPrice: 10.49
+    modifiedStockPrice: 0
+    stockObject: {fileID: 6279032599701353538, guid: c4bbc5bcd1bb8ac4fbdd1aafda037e27, type: 3}
+  boxInfos:
+  - stockName: Granola Cereal
+    stockType: 2
+    stockPrice: 4.99
+    modifiedStockPrice: 0
+    stockObject: {fileID: 8529229785015461289, guid: 017959eaf77e0f145982647830181b49, type: 3}
+  - stockName: Rings Cereal
+    stockType: 2
+    stockPrice: 2.99
+    modifiedStockPrice: 0
+    stockObject: {fileID: 5311270072688993145, guid: 9ae41d02fc0868c4c8fdbbcf55559b22, type: 3}
+  canInfos:
+  - stockName: BBQ Chips
+    stockType: 3
+    stockPrice: 1.99
+    modifiedStockPrice: 0
+    stockObject: {fileID: 7258402178301329082, guid: cf4f54749a912b6478641886c62275df, type: 3}
+  - stockName: Cheddar Chips
+    stockType: 3
+    stockPrice: 1.49
+    modifiedStockPrice: 0
+    stockObject: {fileID: 4185291841006710220, guid: e0c8629deb565ea46b24f6072e1ba5bb, type: 3}
+  - stockName: Onion Chips
+    stockType: 3
+    stockPrice: 1.49
+    modifiedStockPrice: 0
+    stockObject: {fileID: 3806291313662610215, guid: 1cfb515b8b09de6438724b66806b75a4, type: 3}
+  - stockName: Classic Chips
+    stockType: 3
+    stockPrice: 1.49
+    modifiedStockPrice: 0
+    stockObject: {fileID: 6377476165747491813, guid: 53e47cca10b68b14cbe5db758615382a, type: 3}
+  fruitSmallInfos:
+  - stockName: Lemon
+    stockType: 4
+    stockPrice: 0.99
+    modifiedStockPrice: 0
+    stockObject: {fileID: 5759516733149985278, guid: 16b0b705635b90c4087154f99b3e9614, type: 3}
+  - stockName: Green Apple
+    stockType: 4
+    stockPrice: 1.99
+    modifiedStockPrice: 0
+    stockObject: {fileID: 7792536671022311577, guid: 7b194034af4e4a945938b3291332c09b, type: 3}
+  - stockName: Eggplant
+    stockType: 4
+    stockPrice: 1.49
+    modifiedStockPrice: 0
+    stockObject: {fileID: 2145209721461682767, guid: a5e65541f3cf77647ac27e2db271ec27, type: 3}
+  fruitLargeInfos:
+  - stockName: Ananas
+    stockType: 5
+    stockPrice: 30
+    modifiedStockPrice: 0
+    stockObject: {fileID: 6002333945031529970, guid: 9e439dbd192f58f4d936aa02847ee116, type: 3}
+  - stockName: Honeydew Melon
+    stockType: 5
+    stockPrice: 100
+    modifiedStockPrice: 0
+    stockObject: {fileID: 9162612228801449209, guid: 09d8b830f6249d84b8f29bcf995d586f, type: 3}
+  - stockName: Lecttuce
+    stockType: 5
+    stockPrice: 20
+    modifiedStockPrice: 0
+    stockObject: {fileID: 3788306217297574575, guid: d0c5e8a410aca1a4aa5f40e9e18667f5, type: 3}
+  - stockName: Watermelon
+    stockType: 5
+    stockPrice: 30
+    modifiedStockPrice: 0
+    stockObject: {fileID: 8164230900056555721, guid: 1e14800a9f219a44da14d741edbc2a2e, type: 3}
+--- !u!1 &9145280184851377266
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3549337902384660420}
+  m_Layer: 0
+  m_Name: GAME CONTROLLER
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3549337902384660420
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9145280184851377266}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8816952566441251509}
+  - {fileID: 363420897621813834}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

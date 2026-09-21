@@ -32,15 +32,19 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask _whatIsShelf;
     [SerializeField] private LayerMask _whatIsBox;
     [SerializeField] private LayerMask _whatIsBin;
+    [SerializeField] private LayerMask _whatIsFurniture;
     [Header("Interaction Settings")]
     [SerializeField] private float _interactDistance;
     [SerializeField] private Transform _stockHoldPoint;
     [SerializeField] private Transform _boxHoldPoint;
+    [SerializeField] private Transform _furnitureHoldPoint;
     [SerializeField] private float _throwForce;
     [SerializeField] private float _fastRestockHoldingTime;
     private float _placeStockTimer;
+    private FurnitureController _heldFurniture;
     private StockObject _heldItem;
     private StockBoxController _heldBox;
+
 
     void Awake()
     {
@@ -70,7 +74,7 @@ public class PlayerController : MonoBehaviour
         RaycastHit visualHit, actualHit;
         visualHit = InteractableRayCastHit(ray);
 
-        if (_heldItem == null && _heldBox == null)
+        if (_heldItem == null && _heldBox == null && _heldFurniture == null)
         {
             if (Mouse.current.leftButton.wasPressedThisFrame)
             {
@@ -117,8 +121,20 @@ public class PlayerController : MonoBehaviour
                 if (Physics.Raycast(ray, out actualHit, _interactDistance, _whatIsBox))
                 {
                     actualHit.collider.GetComponent<StockBoxController>().OpenClose();
+                    return;
+                }
+                if (Physics.Raycast(ray, out actualHit, _interactDistance, _whatIsFurniture))
+                {
+                    _heldFurniture = actualHit.transform.GetComponent<FurnitureController>();
+
+                    _heldFurniture.transform.SetParent(_furnitureHoldPoint);
+                    _heldFurniture.transform.localPosition = Vector3.zero;
+                    _heldFurniture.transform.localRotation = Quaternion.identity;
+
+                    _heldFurniture.MakePlaceable();
                 }
             }
+
         }
         else if (_heldItem != null)
         {
@@ -190,6 +206,19 @@ public class PlayerController : MonoBehaviour
                 _heldBox.transform.SetParent(null);
                 _heldBox = null;
                 return;
+            }
+        }
+        else if(_heldFurniture != null)
+        {
+            _heldFurniture.transform.position = new Vector3 (_furnitureHoldPoint.position.x,0f,_furnitureHoldPoint.position.z);
+            _heldFurniture.transform.LookAt(new Vector3(transform.position.x,0f,transform.position.z));
+
+            if (Keyboard.current.eKey.wasPressedThisFrame)
+            {
+                _heldFurniture.transform.SetParent(null);
+                _heldFurniture.PlaceFurniture();
+                _heldFurniture = null;
+
             }
         }
     }

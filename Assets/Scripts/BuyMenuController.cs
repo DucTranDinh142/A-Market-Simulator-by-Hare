@@ -8,8 +8,8 @@ public class BuyMenuController : MonoBehaviour
 
     private void Start()
     {
-        stockButton.interactable = true;
-        furnitureButton.interactable = false;
+        stockButton.interactable = false;
+        furnitureButton.interactable = true;
     }
     public void OpenStocksPanel()
     {
